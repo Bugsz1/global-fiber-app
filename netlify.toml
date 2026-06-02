@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm install && pnpm run build"
+  command = "pnpm install --config.minimum-release-age=0 && pnpm run build --config.minimum-release-age=0"
   publish = "dist"
 
 [build.environment]
