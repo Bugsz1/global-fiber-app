@@ -1545,10 +1545,14 @@ const produtos = [
   },
 ];
 
-function TabAssinaturas() {
+function TabAssinaturas({ usuario }: { usuario: UsuarioLogado }) {
   const [secao, setSecao] = useState<"assinaturas" | "produtos">("assinaturas");
   const [ativos, setAtivos] = useState<string[]>(["Netflix Standard", "Spotify Premium"]);
   const [carrinho, setCarrinho] = useState<string[]>([]);
+  const [copiado, setCopiado] = useState(false);
+  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
 
   const toggle = (nome: string) =>
     setAtivos((prev) => prev.includes(nome) ? prev.filter((n) => n !== nome) : [...prev, nome]);
@@ -1799,6 +1803,7 @@ const parceirosDiaDia = [
 
 function TabBeneficios({ infoPlano, onNavigate, usuario }: { infoPlano: PlanoInfo; onNavigate: (tab: Tab) => void; usuario: UsuarioLogado }) {
   const [abaAtiva, setAbaAtiva] = useState<"ranking" | "diaadia" | "beneficios">("ranking");
+  const [copiado, setCopiado] = useState(false);
   const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER")
     .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
@@ -2081,8 +2086,12 @@ function TabBeneficios({ infoPlano, onNavigate, usuario }: { infoPlano: PlanoInf
                 <p className="text-xs text-white/60">Seu código de indicação</p>
                 <p className="font-mono font-extrabold text-lg tracking-widest mt-0.5" style={{ color: TURQUESA }}>{codigoIndicacao}</p>
               </div>
-              <button className="bg-white/20 hover:bg-white/30 transition-colors rounded-lg px-3 py-1.5 text-xs font-semibold">
-                Copiar
+              <button
+                onClick={() => { navigator.clipboard?.writeText(codigoIndicacao).catch(() => {}); setCopiado(true); setTimeout(() => setCopiado(false), 2000); }}
+                className="rounded-lg px-3 py-1.5 text-xs font-semibold transition-all flex items-center gap-1"
+                style={{ background: copiado ? "#16a34a" : "rgba(255,255,255,0.2)", color: "#fff" }}
+              >
+                {copiado ? <><Check size={11} /> Copiado!</> : <><Copy size={11} /> Copiar</>}
               </button>
             </div>
 
@@ -2240,7 +2249,13 @@ function TabBeneficios({ infoPlano, onNavigate, usuario }: { infoPlano: PlanoInf
               <p className="text-xs text-white/70 leading-relaxed">Traga um amigo e ganhe <span className="text-white font-bold">1 mês grátis</span> + <span className="text-white font-bold">+5% de desconto</span> nos parceiros.</p>
               <div className="mt-3 bg-white/10 rounded-xl px-3 py-2 flex items-center justify-between">
                 <p className="font-mono font-extrabold tracking-widest text-sm" style={{ color: TURQUESA }}>{codigoIndicacao}</p>
-                <button className="text-xs font-semibold bg-white/20 hover:bg-white/30 transition-colors rounded-lg px-3 py-1">Copiar</button>
+                <button
+                  onClick={() => { navigator.clipboard?.writeText(codigoIndicacao).catch(() => {}); setCopiado(true); setTimeout(() => setCopiado(false), 2000); }}
+                  className="text-xs font-semibold rounded-lg px-3 py-1 transition-all flex items-center gap-1"
+                  style={{ background: copiado ? "#16a34a" : "rgba(255,255,255,0.2)", color: "#fff" }}
+                >
+                  {copiado ? <><Check size={11} /> Copiado!</> : <><Copy size={11} /> Copiar</>}
+                </button>
               </div>
             </div>
           </div>
@@ -2415,7 +2430,7 @@ export default function App() {
               {tab === "inicio"      && <TabInicio planoAtivo={planoAtivo} infoPlano={infoPlano} onNavigate={setTab} />}
               {tab === "faturas"     && <TabFaturas infoPlano={infoPlano} />}
               {tab === "consumo"     && <TabConsumo infoPlano={infoPlano} />}
-              {tab === "assinaturas" && <TabAssinaturas />}
+              {tab === "assinaturas" && <TabAssinaturas usuario={usuarioLogado!} />}
               {tab === "beneficios"  && <TabBeneficios infoPlano={infoPlano} onNavigate={setTab} usuario={usuarioLogado!} />}
               {tab === "perfil"      && <TabPerfil onLogout={handleLogout} planoAtivo={planoAtivo} onChangePlano={setPlanoAtivo} onAbrirPlanos={() => setModalPlanos(true)} usuario={usuarioLogado!} />}
               {tab === "usuarios"    && <TabUsuarios />}
