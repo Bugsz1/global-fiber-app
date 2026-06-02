@@ -1795,8 +1795,9 @@ const parceirosDiaDia = [
   },
 ];
 
-function TabBeneficios({ infoPlano, onNavigate }: { infoPlano: PlanoInfo; onNavigate: (tab: Tab) => void }) {
+function TabBeneficios({ infoPlano, onNavigate, usuario }: { infoPlano: PlanoInfo; onNavigate: (tab: Tab) => void; usuario: UsuarioLogado }) {
   const [abaAtiva, setAbaAtiva] = useState<"ranking" | "diaadia" | "beneficios">("ranking");
+  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER").toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
 
   // Abner é cliente desde Jan/2024 → ~28 meses → Diamante (índice 4)
   const rankingAtual = 4;
@@ -2411,7 +2412,7 @@ export default function App() {
               {tab === "faturas"     && <TabFaturas infoPlano={infoPlano} />}
               {tab === "consumo"     && <TabConsumo infoPlano={infoPlano} />}
               {tab === "assinaturas" && <TabAssinaturas />}
-              {tab === "beneficios"  && <TabBeneficios infoPlano={infoPlano} onNavigate={setTab} />}
+              {tab === "beneficios"  && <TabBeneficios infoPlano={infoPlano} onNavigate={setTab} usuario={usuarioLogado!} />}
               {tab === "perfil"      && <TabPerfil onLogout={handleLogout} planoAtivo={planoAtivo} onChangePlano={setPlanoAtivo} onAbrirPlanos={() => setModalPlanos(true)} usuario={usuarioLogado!} />}
               {tab === "usuarios"    && <TabUsuarios />}
             </div>
