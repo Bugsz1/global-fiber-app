@@ -66,11 +66,11 @@ const consumoSemanal = [
 ];
 
 const consumoMensal = [
-  { mes: "Jan", gb: 320 },
-  { mes: "Fev", gb: 290 },
-  { mes: "Mar", gb: 410 },
-  { mes: "Abr", gb: 380 },
-  { mes: "Mai", gb: 215 },
+  { mes: "Jan", gb: 520 },
+  { mes: "Fev", gb: 790 },
+  { mes: "Mar", gb: 610 },
+  { mes: "Abr", gb: 450 },
+  { mes: "Mai", gb: 615 },
 ];
 
 const faturas = [
@@ -312,9 +312,9 @@ const planosPymes = [
     recursos: ["Wi-Fi 6 empresarial", "Suporte 24h VIP", "IP fixo incluso", "Instalação grátis", "SLA garantido"],
   },
   {
-    nome: "Pymes 800",
-    velocidade: "800 MB",
-    upload: "400 MB",
+    nome: "Pymes 700",
+    velocidade: "700 MB",
+    upload: "350 MB",
     preco: 609.99,
     destaque: true,
     cor: "#16a34a",
@@ -547,6 +547,7 @@ function TabPerfil({ onLogout, planoAtivo, onChangePlano, onAbrirPlanos, usuario
   const infoPlanoAtual = todosOsPlanos.find((p) => p.nome === planoAtivo)!;
   const toggle = (s: string) => setSecaoAberta((v) => (v === s ? null : s));
   const iniciais = usuario.nome.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
+  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER").toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
 
   return (
     <div className="flex flex-col gap-4 pb-6">
@@ -846,7 +847,7 @@ function MiniBarChart({ data, height }: { data: { mes: string; gb: number }[]; h
 
 function TabInicio({ planoAtivo, infoPlano, onNavigate }: { planoAtivo: string; infoPlano: PlanoInfo; onNavigate: (tab: Tab) => void }) {
   const usadoGB = 215;
-  const totalGB = 500;
+  const totalGB = 1000;
   const pct = Math.round((usadoGB / totalGB) * 100);
   const precoFormatado = `R$ ${infoPlano.preco.toFixed(2).replace(".", ",")}`;
   const velNum = parseFloat(infoPlano.velocidade);
@@ -1245,7 +1246,7 @@ type FaseTeste = "idle" | "conectando" | "download" | "upload" | "concluido";
 function TabConsumo({ infoPlano }: { infoPlano: PlanoInfo }) {
   const [periodo, setPeriodo] = useState<"semanal" | "mensal">("semanal");
   const usadoGB = 215;
-  const totalGB = 500;
+  const totalGB = 1000;
   const pct = Math.round((usadoGB / totalGB) * 100);
   const velNum = parseFloat(infoPlano.velocidade);
   const targetDL = infoPlano.velocidade.includes("GB") ? 985 : Math.round(velNum * 0.97);
@@ -2073,7 +2074,7 @@ function TabBeneficios({ infoPlano, onNavigate }: { infoPlano: PlanoInfo; onNavi
             <div className="mt-4 bg-white/10 rounded-xl p-3 flex items-center justify-between">
               <div>
                 <p className="text-xs text-white/60">Seu código de indicação</p>
-                <p className="font-mono font-extrabold text-lg tracking-widest mt-0.5" style={{ color: TURQUESA }}>ABNER25</p>
+                <p className="font-mono font-extrabold text-lg tracking-widest mt-0.5" style={{ color: TURQUESA }}>{codigoIndicacao}</p>
               </div>
               <button className="bg-white/20 hover:bg-white/30 transition-colors rounded-lg px-3 py-1.5 text-xs font-semibold">
                 Copiar
@@ -2233,7 +2234,7 @@ function TabBeneficios({ infoPlano, onNavigate }: { infoPlano: PlanoInfo; onNavi
               </div>
               <p className="text-xs text-white/70 leading-relaxed">Traga um amigo e ganhe <span className="text-white font-bold">1 mês grátis</span> + <span className="text-white font-bold">+5% de desconto</span> nos parceiros.</p>
               <div className="mt-3 bg-white/10 rounded-xl px-3 py-2 flex items-center justify-between">
-                <p className="font-mono font-extrabold tracking-widest text-sm" style={{ color: TURQUESA }}>ABNER25</p>
+                <p className="font-mono font-extrabold tracking-widest text-sm" style={{ color: TURQUESA }}>{codigoIndicacao}</p>
                 <button className="text-xs font-semibold bg-white/20 hover:bg-white/30 transition-colors rounded-lg px-3 py-1">Copiar</button>
               </div>
             </div>
