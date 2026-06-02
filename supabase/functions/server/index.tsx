@@ -121,6 +121,32 @@ app.get("/make-server-6a374317/usuarios", async (c) => {
   }
 });
 
+// Atualiza metadados de um usuário pelo ID
+app.put("/make-server-6a374317/usuarios/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const { nome, plano, perfil } = await c.req.json();
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    const { data, error } = await supabase.auth.admin.updateUserById(id, {
+      user_metadata: { nome, plano, perfil },
+    });
+
+    if (error) return c.json({ error: error.message }, 400);
+
+    const kvKey = `usuario:${id}`;
+    const perfilAtual = (await kv.get(kvKey)) ?? {};
+    await kv.set(kvKey, { ...perfilAtual, nome, plano, perfil });
+
+    return c.json({ ok: true, id });
+  } catch (e) {
+    return c.json({ error: String(e) }, 500);
+  }
+});
+
 // Deleta um usuário pelo ID
 app.delete("/make-server-6a374317/usuarios/:id", async (c) => {
   try {

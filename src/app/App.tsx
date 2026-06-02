@@ -547,7 +547,9 @@ function TabPerfil({ onLogout, planoAtivo, onChangePlano, onAbrirPlanos, usuario
   const infoPlanoAtual = todosOsPlanos.find((p) => p.nome === planoAtivo)!;
   const toggle = (s: string) => setSecaoAberta((v) => (v === s ? null : s));
   const iniciais = usuario.nome.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
-  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER").toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
+  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
 
   return (
     <div className="flex flex-col gap-4 pb-6">
@@ -1797,7 +1799,9 @@ const parceirosDiaDia = [
 
 function TabBeneficios({ infoPlano, onNavigate, usuario }: { infoPlano: PlanoInfo; onNavigate: (tab: Tab) => void; usuario: UsuarioLogado }) {
   const [abaAtiva, setAbaAtiva] = useState<"ranking" | "diaadia" | "beneficios">("ranking");
-  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER").toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
+  const codigoIndicacao = (usuario.nome.split(" ")[0] ?? "USER")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toUpperCase().replace(/[^A-Z0-9]/g, "") + "25";
 
   // Abner é cliente desde Jan/2024 → ~28 meses → Diamante (índice 4)
   const rankingAtual = 4;
