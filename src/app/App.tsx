@@ -2376,8 +2376,8 @@ export default function App() {
               className="flex-shrink-0 flex items-center justify-between px-5 py-3 text-white"
               style={{ background: NAVY }}
             >
-              <div className="flex flex-col gap-1">
-                <div className="bg-white rounded-xl px-3 py-1 self-start">
+              <div className="flex items-center gap-3">
+                <div className="bg-white rounded-xl px-3 py-1">
                   <ImageWithFallback
                     src={logoGlobal}
                     alt="Global Fiber"
